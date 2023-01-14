@@ -1,7 +1,12 @@
 import CardMenu from "../UI/CardsMenu";
 import useCloseMenu from "../../hooks/useCloseMenu";
 import { useDispatch } from "react-redux";
-import { toggleAddAmount } from "../../store/ui-Slice";
+import {
+  toggleAddAmount,
+  toggleEditCategory,
+  toggleSubtractAmount,
+  toggleTransferAmount,
+} from "../../store/ui-Slice";
 
 const CategoryMenu = ({ toogleMenuHandler, data }) => {
   const menuRef = useCloseMenu(toogleMenuHandler);
@@ -9,10 +14,10 @@ const CategoryMenu = ({ toogleMenuHandler, data }) => {
 
   return (
     <CardMenu ref={menuRef}>
-      <li>Edit</li>
+      <li onClick={() => dispatch(toggleEditCategory(data))}>Edit</li>
       <li onClick={() => dispatch(toggleAddAmount(data))}>Add</li>
-      <li>Discount</li>
-      <li>Transfer</li>
+      <li onClick={() => dispatch(toggleSubtractAmount(data))}>Discount</li>
+      <li onClick={() => dispatch(toggleTransferAmount(data))}>Transfer</li>
     </CardMenu>
   );
 };
