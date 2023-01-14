@@ -1,12 +1,33 @@
+import { useState } from "react";
 import Modal from "../../UI/Modal";
 import styles from "../../../Components/UI/Modal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleAddCategory } from "../../../store/ui-Slice";
+import useAddDoc from "../../../hooks/useAddDoc";
 
 const AddCategory = () => {
+  const [title, setTitle] = useState("");
+  const [percentage, setPercentage] = useState(0);
+
   const { isVisible, category } = useSelector((state) => state.ui.addCategory);
   const dispatch = useDispatch();
-  console.log(category);
+
+  const addCategoryDoc = useAddDoc();
+
+  const addCategory = (e) => {
+    e.preventDefault();
+
+    if (!title || !percentage) return;
+
+    addCategoryDoc("categories", {
+      title,
+      percentage: Number(percentage),
+      amount: 0,
+    });
+    dispatch(toggleAddCategory(null));
+    setTitle("");
+    setPercentage("");
+  };
 
   return (
     <Modal
@@ -15,7 +36,7 @@ const AddCategory = () => {
       title="Add New Category"
     >
       <div>
-        <form>
+        <form onSubmit={addCategory}>
           <div className={styles["label-input"]}>
             <label htmlFor="title" className="p">
               Title
@@ -25,6 +46,7 @@ const AddCategory = () => {
               id="title"
               name="title"
               placeholder="Ex: Essencial"
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div className={styles["label-input"]}>
@@ -34,6 +56,7 @@ const AddCategory = () => {
               id="percentage"
               name="percentage"
               placeholder="%"
+              onChange={(e) => setPercentage(e.target.value)}
             />
           </div>
           <div className={styles.buttons}>

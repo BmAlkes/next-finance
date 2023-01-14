@@ -1,14 +1,49 @@
+import { useState, useEffect } from "react";
 import Modal from "../../UI/Modal";
 import styles from "../../../Components/UI/Modal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTransferAmount } from "../../../store/ui-Slice";
+import useUpdateDoc from "../../../hooks/useUpdateDocs";
 
 const TransferAmount = () => {
+  const [options, setOptions] = useState([]);
+  const [destination, setDestination] = useState("");
+  const [amount, setAmount] = useState(0);
+
+  const { categories } = useSelector((state) => state.app);
+
   const { isVisible, category } = useSelector(
     (state) => state.ui.transferAmount
   );
   const dispatch = useDispatch();
-  console.log(category);
+  useEffect(() => {
+    const options = categories
+      .map((category) => category.title)
+      .filter((tittle) => tittle !== category?.title);
+
+    setOptions(options);
+    setDestination(options[0]);
+  }, [categories, category?.title]);
+
+  const transferAmountHandler = useUpdateDoc();
+
+  const transferAmount = (e) => {
+    e.preventDefault();
+    if (!amount || !destination) return;
+
+    const destinationCategory = categories.find(
+      (category) => category.title === destination
+    );
+    transferAmountHandler("categories", category.id, {
+      amount: category.amount - Number(amount),
+    });
+
+    transferAmountHandler("categories", destinationCategory.id, {
+      amount: destinationCategory.amount + Number(amount),
+    });
+    dispatch(toggleTransferAmount(null));
+    setAmount(0);
+  };
 
   return (
     <Modal
@@ -17,17 +52,27 @@ const TransferAmount = () => {
       title="Transfer Amount"
     >
       <div>
-        <form>
+        <form onSubmit={transferAmount}>
           <div className={styles["label-input"]}>
             <p>From</p>
-            <p className="caption">Personal</p>
+            <p className="caption">{category?.title ?? "Not Found"}</p>
           </div>
           <div className={styles["label-input"]}>
             <label htmlFor="destination">For</label>
-            <select name="destination" id="destination" className="max-width">
-              <option value="essencial">Essencial</option>
-              <option value="personal">Personal</option>
-              <option value="invest">Invest</option>
+            <select
+              name="destination"
+              id="destination"
+              className="max-width"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+            >
+              {options.map((option, i) => {
+                return (
+                  <option value={option} key={i}>
+                    {option}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <div className={styles["label-input"]}>
@@ -38,6 +83,7 @@ const TransferAmount = () => {
               name="amount"
               placeholder="₪"
               className="max-width"
+              onChange={(e) => setAmount(e.target.value)}
             />
           </div>
           <div className={styles.buttons}>

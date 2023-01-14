@@ -2,11 +2,30 @@ import Modal from "../../UI/Modal";
 import styles from "../../../Components/UI/Modal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleAddAmount } from "../../../store/ui-Slice";
+import { useState } from "react";
+import { doc, updateDoc } from "@firebase/firestore";
+import db from "../../../firebase";
+import useUpdateDoc from "../../../hooks/useUpdateDocs";
 
 const AddAmount = () => {
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState(0);
   const { isVisible, category } = useSelector((state) => state.ui.addAmount);
   const dispatch = useDispatch();
-  console.log(category);
+
+  const addAmountHandler = useUpdateDoc();
+
+  const addAmount = (e) => {
+    e.preventDefault();
+    if (!title || !amount) return;
+
+    addAmountHandler("categories", category.id, {
+      amount: category.amount + Number(amount),
+    });
+    setTitle("");
+    setAmount(0);
+    dispatch(toggleAddAmount(null));
+  };
 
   return (
     <Modal
@@ -15,7 +34,7 @@ const AddAmount = () => {
       title="Add Amount"
     >
       <div>
-        <form>
+        <form onSubmit={addAmount}>
           <div className={styles["label-input"]}>
             <label htmlFor="title" className="p">
               Title
@@ -25,6 +44,7 @@ const AddAmount = () => {
               id="title"
               name="title"
               placeholder="Ex: sell KeyBoard"
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div className={styles["label-input"]}>
@@ -35,6 +55,7 @@ const AddAmount = () => {
               name="amount"
               placeholder="₪"
               className="max-width"
+              onChange={(e) => setAmount(e.target.value)}
             />
           </div>
           <div className={styles.buttons}>

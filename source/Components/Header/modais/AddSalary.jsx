@@ -2,11 +2,30 @@ import Modal from "../../UI/Modal";
 import styles from "../../../Components/UI/Modal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleAddSalary } from "../../../store/ui-Slice";
+import { useState } from "react";
+import useUpdateDoc from "../../../hooks/useUpdateDocs";
 
 const AddSalary = () => {
-  const { isVisible, category } = useSelector((state) => state.ui.addSalary);
+  const [amount, setAmount] = useState(0);
+  const { isVisible } = useSelector((state) => state.ui.addSalary);
+  const { categories } = useSelector((state) => state.app);
   const dispatch = useDispatch();
-  console.log(category);
+
+  const addSalaryHandler = useUpdateDoc();
+
+  const addPayment = (e) => {
+    e.preventDefault();
+    if (!amount) return;
+
+    categories.forEach((category) => {
+      const totalAmount = (Number(amount) * category.percentage) / 100;
+
+      addSalaryHandler("categories", category.id, {
+        amount: category.amount + totalAmount,
+      });
+    });
+    dispatch(toggleAddSalary(null));
+  };
 
   return (
     <Modal
@@ -15,7 +34,7 @@ const AddSalary = () => {
       title="Add Salary"
     >
       <div>
-        <form>
+        <form onSubmit={addPayment}>
           <div className={styles["label-input"]}>
             <label htmlFor="amount">Amount</label>
             <input
@@ -24,6 +43,7 @@ const AddSalary = () => {
               name="amount"
               placeholder="₪"
               className="max-width"
+              onChange={(e) => setAmount(e.target.value)}
             />
           </div>
 
