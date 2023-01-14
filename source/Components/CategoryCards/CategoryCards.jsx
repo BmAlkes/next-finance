@@ -1,19 +1,19 @@
 import styles from "./CategoryCards.module.scss";
 import { TbPencil } from "react-icons/tb";
 import useGetCurrency from "../../hooks/useGetCurrency";
-import CardsMenu from "../UI/CardsMenu";
 import CategoryMenu from "../CategoryCards/CategoryMenu";
+import useMenu from "../../hooks/useMenu";
 
 const CategoryCards = ({ data }) => {
   const { title, amount, percentage } = data;
-
+  const [isVisible, toggleMenuHandler] = useMenu();
   const formattedAmount = useGetCurrency(amount);
 
   return (
     <div className={styles.card}>
       <div className={styles.edit}>
-        <TbPencil className="icon hover" />
-        <CategoryMenu />
+        <TbPencil className="icon hover" onClick={toggleMenuHandler} />
+        {isVisible && <CategoryMenu toogleMenuHandler={toggleMenuHandler} />}
       </div>
       <h2>{title}</h2>
       <h3>₪ {formattedAmount}</h3>
