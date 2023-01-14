@@ -1,7 +1,7 @@
 import CategoryCards from "./CategoryCards";
 import styles from "./AllCards.module.scss";
 import NoCard from "./NoCard";
-import Modal from "../UI/Modal";
+import AddAmount from "../CategoryCards/modais/AddAmount";
 
 const DUMMY_DATA = [
   {
@@ -37,7 +37,7 @@ const AllCards = () => {
 
   return (
     <>
-      <Modal />
+      <AddAmount />
       <section className={styles.section}>
         {cards}
         <NoCard />
