@@ -10,7 +10,7 @@ const HeaderMenu = ({ toogleMenuHandler }) => {
 
   return (
     <CardMenu ref={cardRef}>
-      <li onClick={() => dispatch(toggleAddSalary())}>Add Payment</li>
+      <li onClick={() => dispatch(toggleAddSalary(null))}>Add Payment</li>
     </CardMenu>
   );
 };

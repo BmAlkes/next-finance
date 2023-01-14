@@ -6,30 +6,13 @@ import SubtractAmount from "../CategoryCards/modais/SubtractAmount";
 import TransferAmount from "../CategoryCards/modais/TransferAmount";
 import EditCategory from "../CategoryCards/modais/EditCategory";
 import AddCategory from "../CategoryCards/modais/AddCategory";
-
-const DUMMY_DATA = [
-  {
-    id: 1,
-    title: "Personal",
-    amount: 400,
-    percentage: 20,
-  },
-  {
-    id: 2,
-    title: "Essencial",
-    amount: 2000,
-    percentage: 30,
-  },
-  {
-    id: 3,
-    title: "Invest",
-    amount: 500,
-    percentage: 20,
-  },
-];
+import useGetDoc from "../../hooks/useGetDoc";
+import { useSelector } from "react-redux";
 
 const AllCards = () => {
-  const cards = DUMMY_DATA.map((category) => {
+  const { categories } = useSelector((state) => state.app);
+
+  const cards = categories.map((category) => {
     return <CategoryCards key={category.id} data={category} />;
   });
 
