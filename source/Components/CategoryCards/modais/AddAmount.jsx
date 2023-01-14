@@ -3,9 +3,9 @@ import styles from "../../../Components/UI/Modal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleAddAmount } from "../../../store/ui-Slice";
 import { useState } from "react";
-import { doc, updateDoc } from "@firebase/firestore";
-import db from "../../../firebase";
 import useUpdateDoc from "../../../hooks/useUpdateDocs";
+import useAddDoc from "../../../hooks/useAddDoc";
+import { serverTimestamp } from "@firebase/firestore";
 
 const AddAmount = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +14,7 @@ const AddAmount = () => {
   const dispatch = useDispatch();
 
   const addAmountHandler = useUpdateDoc();
+  const addTransactionHandler = useAddDoc();
 
   const addAmount = (e) => {
     e.preventDefault();
@@ -22,6 +23,13 @@ const AddAmount = () => {
     addAmountHandler("categories", category.id, {
       amount: category.amount + Number(amount),
     });
+    addTransactionHandler("transactions", {
+      amount: Number(amount),
+      title,
+      type: "income",
+      date: serverTimestamp(),
+    });
+
     setTitle("");
     setAmount(0);
     dispatch(toggleAddAmount(null));

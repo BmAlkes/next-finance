@@ -4,6 +4,8 @@ import styles from "../../../Components/UI/Modal.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleSubtractAmount } from "../../../store/ui-Slice";
 import useUpdateDoc from "../../../hooks/useUpdateDocs";
+import useAddDoc from "../../../hooks/useAddDoc";
+import { serverTimestamp } from "@firebase/firestore";
 
 const SubTractAmount = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +16,7 @@ const SubTractAmount = () => {
   const dispatch = useDispatch();
 
   const substractAmountHandler = useUpdateDoc();
+  const addTransactionHandler = useAddDoc();
 
   const substractAmount = (e) => {
     e.preventDefault();
@@ -21,6 +24,12 @@ const SubTractAmount = () => {
 
     substractAmountHandler("categories", category.id, {
       amount: category.amount - Number(amount),
+    });
+    addTransactionHandler("transactions", {
+      amount: Number(amount),
+      title,
+      type: "expense",
+      date: serverTimestamp(),
     });
 
     setTitle("");

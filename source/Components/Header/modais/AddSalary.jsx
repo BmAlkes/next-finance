@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleAddSalary } from "../../../store/ui-Slice";
 import { useState } from "react";
 import useUpdateDoc from "../../../hooks/useUpdateDocs";
+import { serverTimestamp } from "@firebase/firestore";
+import useAddDoc from "../../../hooks/useAddDoc";
 
 const AddSalary = () => {
   const [amount, setAmount] = useState(0);
@@ -12,6 +14,7 @@ const AddSalary = () => {
   const dispatch = useDispatch();
 
   const addSalaryHandler = useUpdateDoc();
+  const addTransactionHandler = useAddDoc();
 
   const addPayment = (e) => {
     e.preventDefault();
@@ -23,8 +26,16 @@ const AddSalary = () => {
       addSalaryHandler("categories", category.id, {
         amount: category.amount + totalAmount,
       });
+      addTransactionHandler("transactions", {
+        amount: totalAmount,
+        title: `Payment in ${category.title}`,
+        type: "income",
+        date: serverTimestamp(),
+      });
     });
+
     dispatch(toggleAddSalary(null));
+    setAmount(0);
   };
 
   return (
