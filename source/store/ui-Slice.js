@@ -21,6 +21,10 @@ const initialState = {
     isVisible: false,
     category: null,
   },
+  addSalary: {
+    isVisible: false,
+    category: null,
+  },
 };
 
 const uiSlice = createSlice({
@@ -47,6 +51,10 @@ const uiSlice = createSlice({
       state.addCategory.isVisible = !state.addCategory.isVisible;
       state.addCategory.category = action.payload;
     },
+    toggleAddSalary: (state, action) => {
+      state.addSalary.isVisible = !state.addSalary.isVisible;
+      state.addSalary.category = action.payload;
+    },
   },
 });
 
@@ -56,5 +64,6 @@ export const {
   toggleTransferAmount,
   toggleEditCategory,
   toggleAddCategory,
+  toggleAddSalary,
 } = uiSlice.actions;
 export default uiSlice.reducer;
