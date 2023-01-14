@@ -1,9 +1,19 @@
 import Modal from "../../UI/Modal";
 import styles from "../../../Components/UI/Modal.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleAddAmount } from "../../../store/ui-Slice";
 
 const AddAmount = () => {
+  const { isVisible, category } = useSelector((state) => state.ui.addAmount);
+  const dispatch = useDispatch();
+  console.log(category);
+
   return (
-    <Modal isOpen={true} onClose={() => {}} title="Add Amount">
+    <Modal
+      isOpen={isVisible}
+      onClose={() => dispatch(toggleAddAmount(null))}
+      title="Add Amount"
+    >
       <div>
         <form>
           <div className={styles["label-input"]}>

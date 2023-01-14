@@ -22,12 +22,6 @@ const DUMMY_DATA = [
     amount: 500,
     percentage: 20,
   },
-  {
-    id: 4,
-    title: "several",
-    amount: 800,
-    percentage: 30,
-  },
 ];
 
 const AllCards = () => {
