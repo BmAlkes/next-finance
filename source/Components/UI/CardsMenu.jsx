@@ -1,8 +1,10 @@
-import styles from "./CardMenu.module.scss";
-const CardsMenu = () => {
+import styles from "./CardsMenu.module.scss";
+const CardsMenu = ({ children }) => {
   return (
     <div className={styles.card}>
-      <div></div>
+      <div>
+        <ul className={styles.list}>{children}</ul>
+      </div>
     </div>
   );
 };
