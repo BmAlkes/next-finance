@@ -1,6 +1,7 @@
 import CategoryCards from "./CategoryCards";
 import styles from "./AllCards.module.scss";
 import NoCard from "./NoCard";
+import Modal from "../UI/Modal";
 
 const DUMMY_DATA = [
   {
@@ -35,10 +36,13 @@ const AllCards = () => {
   });
 
   return (
-    <section className={styles.section}>
-      {cards}
-      <NoCard />
-    </section>
+    <>
+      <Modal />
+      <section className={styles.section}>
+        {cards}
+        <NoCard />
+      </section>
+    </>
   );
 };
 
